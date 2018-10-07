@@ -1,0 +1,14 @@
+[
+	{
+		"id": 1,
+		"title": "Hello World",
+		"content": "Trying react JS.",
+		"slug": "hello-world"
+	},
+	{
+		"id": 2,
+		"title": "Setup React",
+		"content": "Setting up React project.",
+		"slug": "setup-react"
+	}
+]
