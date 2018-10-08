@@ -8,9 +8,13 @@ class PostDetail extends Component {
     this.titleWasClicked = this.titleWasClicked.bind(this)
   }
 
-  titleWasClicked (event) { // defining a method
-    event.preventDefault() // this can be used to prevent any default action like stop from submitting a form
-    alert(this.props)
+  titleWasClicked (event) {
+    event.preventDefault()
+    const { dataCallback } = this.props // We have to first define the callback before using it
+    // console.log(dataCallback)
+    if (dataCallback !== undefined) { // used when no such property is defined in the parent component
+      dataCallback('hello there!')
+    }
   }
 
   render () {
