@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
 import PostData from '../data/posts.json' // import the json data with the name PostData
 
+import PostDetail from './PostDetail'
+
 class PostList extends Component {
   render () {
     return (
-      <div className='App'>
+      <div>
         <h1>Hello World</h1>
 
-        {PostData.map((postDetail, index) => { // iterate through the data; postDetail is the iterated item
-          return <div>
-            <h1>{postDetail.title}</h1>
-            <p>{postDetail.content}</p>
-          </div>
+        {PostData.map((item, index) => { // iterate through the data
+          return <PostDetail post={item} key={`post-list-key ${index}`} /> // Calling a prop
         })}
       </div>
     )
