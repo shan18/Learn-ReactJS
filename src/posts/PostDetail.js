@@ -3,27 +3,45 @@ import React, { Component } from 'react'
 class PostDetail extends Component {
   constructor (props) {
     super(props)
-    // this allows us to reference the 'this' keyword in function
-    // if the constructor for a method is not defined then using 'this' within the method will throw an error
     this.titleWasClicked = this.titleWasClicked.bind(this)
+    this.toggleContent = this.toggleContent.bind(this)
+    this.state = {
+      showContent: true
+    }
   }
 
   titleWasClicked (event) {
     event.preventDefault()
-    const { dataCallback } = this.props // We have to first define the callback before using it
-    // console.log(dataCallback)
-    if (dataCallback !== undefined) { // used when no such property is defined in the parent component
+    const { dataCallback } = this.props
+    if (dataCallback !== undefined) {
       dataCallback('hello there!')
     }
   }
 
+  toggleContent (event) {
+    event.preventDefault()
+
+    this.setState({
+      showContent: !this.state.showContent
+    })
+
+    // Alternate way of doing the above process
+    //
+    // const { showContent } = this.state
+    // this.setState({
+    //   showContent: !showContent
+    // })
+  }
+
   render () {
-    const { post } = this.props
-    // Alternate way of declaration:  const post = this.props.post
+    const { post } = this.props // Whenever using 'this' we need to define the variable in '{}'
+    const { showContent } = this.state
     return (
       <div>
         <h1 onClick={this.titleWasClicked}>{post.title}</h1>
-        <p>{post.content}</p>
+
+        {showContent === true ? <p>{post.content}</p> : ''}
+        <button onClick={this.toggleContent}>Toggle Content Display</button>
       </div>
     )
   }
