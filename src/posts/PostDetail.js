@@ -6,15 +6,27 @@ class PostDetail extends Component {
     this.titleWasClicked = this.titleWasClicked.bind(this)
     this.toggleContent = this.toggleContent.bind(this)
     this.state = {
-      showContent: true
+      showContent: true,
+      postItem: null
     }
   }
 
   titleWasClicked (event) {
     event.preventDefault()
     const { dataCallback } = this.props
+
+    const newPostItem = {
+      title: 'This is my new title',
+      content: this.state.postItem.content
+      // OR
+      // content = this.props.post.content
+    }
+    this.setState({
+      postItem: newPostItem // cange the title of the post on click
+    })
+
     if (dataCallback !== undefined) {
-      dataCallback('hello there!')
+      dataCallback(newPostItem)
     }
   }
 
@@ -33,15 +45,26 @@ class PostDetail extends Component {
     // })
   }
 
+  // Invoked immediately after a component is mounted (inserted into the tree)
+  // It is called after the constructor
+  componentDidMount () {
+    const { post } = this.props
+    this.setState({ // converting the prop to a state
+      postItem: post
+    })
+  }
+
   render () {
-    const { post } = this.props // Whenever using 'this' we need to define the variable in '{}'
+    const { postItem } = this.state
     const { showContent } = this.state
     return (
       <div>
-        <h1 onClick={this.titleWasClicked}>{post.title}</h1>
-
-        {showContent === true ? <p>{post.content}</p> : ''}
-        <button onClick={this.toggleContent}>Toggle Content Display</button>
+        {postItem !== null ? <div>
+          <h1 onClick={this.titleWasClicked}>{postItem.title}</h1>
+          {showContent === true ? <p>{postItem.content}</p> : ''}
+          <button onClick={this.toggleContent}>Toggle Content Display</button>
+        </div>
+          : ''}
       </div>
     )
   }
