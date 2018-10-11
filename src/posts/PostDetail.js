@@ -5,6 +5,7 @@ class PostDetail extends Component {
     super(props)
     this.titleWasClicked = this.titleWasClicked.bind(this)
     this.toggleContent = this.toggleContent.bind(this)
+    this.handleRemoveContentButton = this.handleRemoveContentButton.bind(this)
     this.state = {
       showContent: true,
       postItem: null
@@ -30,17 +31,17 @@ class PostDetail extends Component {
 
   toggleContent (event) {
     event.preventDefault()
-
     this.setState({
       showContent: !this.state.showContent
     })
+  }
 
-    // Alternate way of doing the above process
-    //
-    // const { showContent } = this.state
-    // this.setState({
-    //   showContent: !showContent
-    // })
+  handleRemoveContentButton (event) {
+    if (this.props.didHandleRemove) { // check whether it is defined
+      this.props.didHandleRemove(this.props.post)
+      // OR
+      // this.props.didHandleRemove(this.state.postItem)
+    }
   }
 
   // Invoked immediately after a component is mounted (inserted into the tree)
@@ -61,6 +62,7 @@ class PostDetail extends Component {
           <h1 onClick={this.titleWasClicked}>{postItem.title}</h1>
           {showContent === true ? <p>{postItem.content}</p> : ''}
           <button onClick={this.toggleContent}>Toggle Content Display</button>
+          <button onClick={this.handleRemoveContentButton}>Remove Content</button>
         </div>
           : ''}
       </div>
