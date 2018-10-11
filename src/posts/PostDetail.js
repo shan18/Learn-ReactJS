@@ -15,12 +15,10 @@ class PostDetail extends Component {
     event.preventDefault()
     const { dataCallback } = this.props
 
-    const newPostItem = {
-      title: 'This is my new title',
-      content: this.state.postItem.content
-      // OR
-      // content = this.props.post.content
-    }
+    // with this, we need to specify only the values we need to change unlike the previous method
+    let newPostItem = this.props.post
+    newPostItem['title'] = 'This is my new title'
+
     this.setState({
       postItem: newPostItem // cange the title of the post on click
     })

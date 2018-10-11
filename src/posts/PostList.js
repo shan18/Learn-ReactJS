@@ -7,18 +7,32 @@ class PostList extends Component {
   constructor (props) {
     super(props)
     this.handleDataCallback = this.handleDataCallback.bind(this)
+    this.state = {
+      postList: []
+    }
   }
 
   handleDataCallback (postItem) { // this method handles the callback for the props
-    console.log(postItem)
+    const currentPostList = this.state.postList
+    currentPostList.push(postItem) // adding the returned postItem to the current list of posts
+    // currentPostList.pop(postItem) // This will remove the returned post from the list
+    this.setState({
+      postList: currentPostList
+    })
+  }
+
+  componentDidMount () {
+    this.setState({
+      postList: PostData
+    })
   }
 
   render () {
+    const { postList } = this.state
     return (
       <div>
         <h1>Hello World</h1>
-
-        {PostData.map((item, index) => {
+        {postList.map((item, index) => {
           return <PostDetail
             post={item}
             key={`post-list-key ${index}`}
