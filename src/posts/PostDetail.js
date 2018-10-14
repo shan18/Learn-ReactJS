@@ -44,13 +44,24 @@ class PostDetail extends Component {
     }
   }
 
+  setPostStateOnProps () {
+    const { post } = this.props
+    this.setState({
+      postItem: post
+    })
+  }
+
+  // Invoked when the parent component has been updated
+  componentDidUpdate (prevProps, prevState, snapshop) {
+    if (this.props !== prevProps) {
+      this.setPostStateOnProps()
+    }
+  }
+
   // Invoked immediately after a component is mounted (inserted into the tree)
   // It is called after the constructor
   componentDidMount () {
-    const { post } = this.props
-    this.setState({ // converting the prop to a state
-      postItem: post
-    })
+    this.setPostStateOnProps()
   }
 
   render () {
