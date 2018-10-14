@@ -70,7 +70,7 @@ class PostDetail extends Component {
     return (
       <div>
         {postItem !== null ? <div>
-          <h1 onClick={this.titleWasClicked}>{postItem.title}</h1>
+          <h1 onClick={this.titleWasClicked}>{postItem.title}: {postItem.date}</h1>
           {showContent === true ? <p>{postItem.content}</p> : ''}
           <button onClick={this.toggleContent}>Toggle Content Display</button>
           <button onClick={this.handleRemoveContentButton}>Remove Content</button>

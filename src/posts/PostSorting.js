@@ -7,9 +7,30 @@ class PostSorting extends Component {
   constructor (props) {
     super(props)
     this.toggleListReverse = this.toggleListReverse.bind(this)
+    this.toggleSortDate = this.toggleSortDate.bind(this)
     this.state = {
-      postList: []
+      postList: [],
+      isOldestFirst: true
     }
+  }
+
+  sortByDate () {
+    const { postList } = this.state
+    let newPostList = postList
+    if (this.state.isOldestFirst) {
+      // If the list is in oldest first state, change it to newest first state
+      newPostList = postList.sort((a, b) => a.date > b.date)
+    } else {
+      newPostList = postList.sort((a, b) => a.date < b.date)
+    }
+    this.setState({
+      isOldestFirst: !this.state.isOldestFirst,
+      postList: newPostList
+    })
+  }
+
+  toggleSortDate (event) {
+    this.sortByDate()
   }
 
   toggleListReverse (event) {
@@ -32,6 +53,7 @@ class PostSorting extends Component {
       <div>
         <h1>Hello World</h1>
         <button onClick={this.toggleListReverse}>Reverse Order</button>
+        <button onClick={this.toggleSortDate}>Order by Date</button>
 
         {/*
           This mapping is changing with every reorder so we need to define a method in the child component to

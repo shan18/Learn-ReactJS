@@ -3,12 +3,14 @@
 		"id": 1,
 		"title": "Hi There",
 		"content": "Trying react JS.",
+		"date": "12-04-2017",
 		"slug": "hello-world"
 	},
 	{
 		"id": 2,
 		"title": "Setup React",
 		"content": "Setting up React project.",
+		"date": "1-28-2018",
 		"slug": "setup-react"
 	}
 ]
