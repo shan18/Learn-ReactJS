@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class PostDetail extends Component {
   constructor (props) {
     super(props)
-    this.titleWasClicked = this.titleWasClicked.bind(this)
+    // this.titleWasClicked = this.titleWasClicked.bind(this)
     this.toggleContent = this.toggleContent.bind(this)
     this.handleRemoveContentButton = this.handleRemoveContentButton.bind(this)
     this.state = {
@@ -12,7 +12,7 @@ class PostDetail extends Component {
     }
   }
 
-  titleWasClicked (event) {
+  titleWasClicked = (event) => { // this eliminates the need to bind functions in the constructor
     event.preventDefault()
     const { dataCallback } = this.props
 
