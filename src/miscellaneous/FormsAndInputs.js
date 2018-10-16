@@ -4,31 +4,48 @@ class FormsAndInputs extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      fullName: null
+      fullName: ''
     }
+    this.inputFullNameRef = React.createRef()
   }
 
   handleSubmit = (event) => {
     event.preventDefault()
     const data = this.state
+    // console.log(this.inputFullNameRef.current.value) // gives the value of the input
     console.log(data)
   }
 
   handleInputChange = (event) => {
     event.preventDefault()
-    // console.log(event)
-    // console.log(event.target.name) // event.target denotes the input attribute
-    // console.log(event.target.value)
     this.setState({
-      // fullName: event.target.value // This will work only for that particular input with name 'fullName'
-      [event.target.name]: event.target.value // This is generic and will work for all input tags
+      [event.target.name]: event.target.value
+    })
+  }
+
+  /*
+   * One real usage of this manual focus is when a user submits a form incorrectly, then we show
+   * him the exact place of error with this manual focus.
+  */
+
+ handleFocusClick = (event) => {
+    this.inputFullNameRef.current.focus() // focus on this input as soon as the button is clicked
+  }
+
+  handleClearClick = (event) => {
+    /* This clears out the data in the input field but it won't clear the input value in <p> above.
+     * This is because it is not correlated to the state variable.
+    */
+    // this.inputFullNameRef.current.value = ''
+
+    // To clear out the <p> along with input value, do the following
+    this.setState({
+      fullName: ''
     })
   }
 
   // componentDidMount () {
-  //   this.setState({
-  //     fullName: 'Shan'
-  //   })
+  //   this.inputFullNameRef.current.focus() // focus on this input as soon as the component mounts
   // }
 
   render () {
@@ -38,18 +55,11 @@ class FormsAndInputs extends Component {
         <h1>Forms and Inputs</h1>
         <p>Full name is: {fullName}</p>
         <form onSubmit={this.handleSubmit}>
-          {/* 'onChange' attribute will call the function 'handleInputChange' whenever there is
-            an update to the input field */}
-          <p><input type='text' placeholder='Your Name' name='fullName' onChange={this.handleInputChange} /></p>
+          <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
 
-          {/* This will give a default value to the input, thus we can use componentDidMount() for
-            giving the state variable its default value */}
-          {/* <p>
-            <input
-              type='text' placeholder='Your Name' name='fullName' value={fullName} onChange={this.handleInputChange}
-            />
-          </p> */}
           <p><button>Send Message</button></p>
+          <p><button onClick={this.handleFocusClick}>Focus</button></p>
+          <p><button onClick={this.handleClearClick}>Clear</button></p>
         </form>
       </div>
     )
