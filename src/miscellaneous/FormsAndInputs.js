@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 
+/*
+ * We use this when we want to create only a single reusable input
+*/
 function MyTextInput (props) {
   function handleChange (event) {
     if (props.onChange) props.onChange(event)
@@ -9,6 +12,39 @@ function MyTextInput (props) {
       <input type='email' value={props.value} name={props.name} ref={props.inputRef} onChange={handleChange} />
     </p>
   )
+}
+
+/*
+ * We use this when we want to create a bunch of reusable inputs
+*/
+class MyInputBlock extends Component {
+  constructor (props) {
+    super(props)
+    this.textInput = null
+    this.setTextInputRef = element => {
+      this.textInput = element
+    }
+    this.focusTextInput = () => {
+      if (this.textInput) this.textInput.focus()
+    }
+  }
+
+  handleChange = (event) => {
+    if(this.props.onChange) this.props.onChange(event)
+  }
+
+  componentDidMount () {
+    this.focusTextInput()
+  }
+  
+  render () {
+    return (
+      <div>
+      <p><input ref={this.setTextInputRef} type='text' placeholder='Your Name' name={this.props.inputFullName} onChange={this.handleChange} /></p>
+        <p><textarea placeholder='Your message' name={this.props.inputContentName} onChange={this.handleChange}></textarea></p>
+      </div>
+    )
+  }
 }
 
 class FormsAndInputs extends Component {
@@ -64,9 +100,10 @@ class FormsAndInputs extends Component {
         <form onSubmit={this.handleSubmit}>
           <MyTextInput inputRef={this.inputEmailRef} value={email} name='email' onChange={this.handleInputChange} />
 
-          {/* If we don't add 'onChange' method then we won't be able to edit the input field */}
-          <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
-          <p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p>
+          {/* Since the props values and the state variable names are same, any change in input is refernecing the
+          handleInputChange() method */}
+          
+          <MyInputBlock onChange={this.handleInputChange} inputFullName='fullName' inputContentName='content' />
           <p><button>Send Message</button></p>
           <p><button onClick={this.handleFocusClick}>Focus</button></p>
           <p><button onClick={this.handleClearClick}>Clear</button></p>
@@ -77,3 +114,7 @@ class FormsAndInputs extends Component {
 }
 
 export default FormsAndInputs
+
+
+{/* <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
+<p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p> */}
