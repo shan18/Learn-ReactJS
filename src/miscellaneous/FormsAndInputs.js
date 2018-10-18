@@ -4,7 +4,8 @@ class FormsAndInputs extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      fullName: ''
+      fullName: '',
+      content: ''
     }
     this.inputFullNameRef = React.createRef()
   }
@@ -13,6 +14,7 @@ class FormsAndInputs extends Component {
     event.preventDefault()
     const data = this.state
     // console.log(this.inputFullNameRef.current.value) // gives the value of the input
+    console.log(this.inputContentRef.value)
     console.log(data)
   }
 
@@ -23,22 +25,14 @@ class FormsAndInputs extends Component {
     })
   }
 
-  /*
-   * One real usage of this manual focus is when a user submits a form incorrectly, then we show
-   * him the exact place of error with this manual focus.
-  */
-
- handleFocusClick = (event) => {
-    this.inputFullNameRef.current.focus() // focus on this input as soon as the button is clicked
+  handleFocusClick = (event) => {
+    event.preventDefault()
+    // we don't need the 'current' attribute because the inline ref is for a particular input and not generic
+    this.inputContentRef.focus()
   }
 
   handleClearClick = (event) => {
-    /* This clears out the data in the input field but it won't clear the input value in <p> above.
-     * This is because it is not correlated to the state variable.
-    */
-    // this.inputFullNameRef.current.value = ''
-
-    // To clear out the <p> along with input value, do the following
+    event.preventDefault()
     this.setState({
       fullName: ''
     })
@@ -55,9 +49,17 @@ class FormsAndInputs extends Component {
         <h1>Forms and Inputs</h1>
         <p>Full name is: {fullName}</p>
         <form onSubmit={this.handleSubmit}>
+
+          {/* Creating a ref and defining it in the constructor */}
           <p><input ref={this.inputFullNameRef} type='text' placeholder='Your Name' value={fullName} name='fullName' onChange={this.handleInputChange} /></p>
 
+          {/* Creating an inline ref */}
+          <p><textarea ref={node => this.inputContentRef = node} placeholder='Your message' name='content' required={true} onChange={this.handleInputChange}></textarea></p>
+
           <p><button>Send Message</button></p>
+
+          {/* The buttons below, go to the onSubmit function after executing their onClick functions.
+          So we need to include event.preventDefault() in those onClick methods */}
           <p><button onClick={this.handleFocusClick}>Focus</button></p>
           <p><button onClick={this.handleClearClick}>Clear</button></p>
         </form>
