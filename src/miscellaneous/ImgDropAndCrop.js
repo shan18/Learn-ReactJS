@@ -7,7 +7,7 @@ import React, { Component } from 'react'
 
 import DropZone from 'react-dropzone'
 import ReactCrop from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css';
+import './custom-image-crop.css'
 
 const imageMaxSize = 10000000 // in bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
