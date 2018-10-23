@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
 
-/* Check the docs:
- * 1. https://react-dropzone.netlify.com/ (React Dropzone)
- * 2. https://github.com/DominicTobias/react-image-crop (React Image Crop)
-*/
-
 import DropZone from 'react-dropzone'
 import ReactCrop from 'react-image-crop'
 import './custom-image-crop.css'
@@ -19,11 +14,12 @@ class ImgDropAndCrop extends Component {
 
   constructor (props) {
     super(props)
+    this.fileInputRef = React.createRef()
     this.imagePreviewCanvasRef = React.createRef()
     this.state = {
       imgSrc: null,
       imgSrcExt: null,
-      crop: { // see docs for other options
+      crop: {
         aspect: 1/1
       }
     }
@@ -57,7 +53,6 @@ class ImgDropAndCrop extends Component {
         const currentFile = files[0]
         const reader = new FileReader()
         reader.addEventListener('load', () => {
-          // console.log(reader.result)
           const myResult = reader.result;
           this.setState({
             imgSrc: myResult,
@@ -74,9 +69,7 @@ class ImgDropAndCrop extends Component {
   }
 
   handleOnCropChange = (crop) => {
-    // console.log(crop)
-    this.setState({crop}) // see docs
-    // console.log(this.state)
+    this.setState({crop})
   }
 
   handleOnCropComplete = (crop, pixelCrop) => {
@@ -88,7 +81,7 @@ class ImgDropAndCrop extends Component {
   handleDownloadClick = (event) => {
     event.preventDefault()
     const {imgSrc} = this.state
-    if (imgSrc) { // this conditional block is redundant, see line 111
+    if (imgSrc) { // this conditional block is redundant, see line 119
       const canvasRef = this.imagePreviewCanvasRef.current
       const {imgSrcExt} = this.state
       const canvasImgSrc = canvasRef.toDataURL('image/' + imgSrcExt)
@@ -97,7 +90,7 @@ class ImgDropAndCrop extends Component {
       // file to be uploaded
       // if we want the file to be sent to our backend, then we can use this to send the file after conversion
       const myNewCroppedFile = base64StringtoFile(canvasImgSrc, myFileName)
-      console.log(myNewCroppedFile)
+      // console.log(myNewCroppedFile)
       
       // download file
       downloadBase64File(canvasImgSrc, myFileName)
@@ -117,6 +110,25 @@ class ImgDropAndCrop extends Component {
         aspect: 1/1
       }
     })
+    this.fileInputRef.current.value = null
+  }
+
+  handleFileSelect = event => {
+    const files = event.target.files
+    if (files && files.length > 0) {
+      if (this.verifyFile(files)) {
+        const currentFile = files[0]
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          const myResult = reader.result;
+          this.setState({
+            imgSrc: myResult,
+            imgSrcExt: extractImageFileExtensionFromBase64(myResult)
+          })
+        }, false)
+        reader.readAsDataURL(currentFile)
+      }
+    }
   }
 
   render () {
@@ -124,10 +136,11 @@ class ImgDropAndCrop extends Component {
     return (
       <div>
         <h1>Drop and Crop</h1>
+        <input ref={this.fileInputRef} type='file' multiple={false} accept={acceptedFileTypes} onChange={this.handleFileSelect} />
         {imgSrc !== null ? 
           <div>
             <ReactCrop
-              src={imgSrc} // This necessarily does not have to be a uploaded image. It can be any external image.
+              src={imgSrc}
               crop={this.state.crop}
               onImageLoaded={this.onImageLoaded}
               onComplete={this.handleOnCropComplete}
